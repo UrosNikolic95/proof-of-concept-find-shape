@@ -95,25 +95,27 @@ namespace monogame_cros_platform.classes
 
         public Vector2[] hexagonPoints()
         {
-            Vector2[] points = new Vector2[7];
-            points[0] = Vector2.Zero;
+            Vector2[] points = new Vector2[6];
             for (int i = 0; i < 6; i++)
             {
-                points[i + 1] = vectorHex(i);
+                points[i] = vectorHex(i);
             }
             return points;
         }
 
         public Vector2[] squarePoints()
         {
-            Vector2[] points = new Vector2[7];
-            points[0] = Vector2.Zero;
-            points[1] = vectorSq(0);
-            points[2] = Helper.between(vectorSq(0), vectorSq(1));
-            points[3] = vectorSq(1);
-            points[4] = vectorSq(2);
-            points[5] = Helper.between(vectorSq(2), vectorSq(3));
-            points[6] = vectorSq(3);
+            Vector2[] points = new Vector2[6];
+            Vector2 v1 = vectorSq(0);
+            Vector2 v2 = vectorSq(1);
+            Vector2 v3 = vectorSq(2);
+            Vector2 v4 = vectorSq(3);
+            points[0] = v1;
+            points[1] = Helper.between(v1, v2);
+            points[2] = v2;
+            points[3] = v3;
+            points[4] = Helper.between(v3, v4);
+            points[5] = v4;
             return points;
         }
 
@@ -416,7 +418,6 @@ namespace monogame_cros_platform.classes
             setPoints();
         }
 
-        bool wasKeyWDown = false;
         bool wasLeftMouseButtonDown = false;
 
 
@@ -474,14 +475,17 @@ namespace monogame_cros_platform.classes
             }
             float width = xMax - xMin;
             float height = yMax - yMin;
-            Vector2 minV = new Vector2(xMin,yMin);
+            Vector2 minV = new Vector2(xMin, yMin);
             Vector2 padding = new Vector2(10,10);
             foreach (Tile tile in chosenHexes)
             {
                 Vector2[] v0 = Helper.addAll(tile.currentPoints, -minV);
                 Vector2[] v1 = Helper.multiplyAll(v0, 100 / width);
                 Vector2[] v2 = Helper.addAll(v1, padding);
-                Tile.DrawPolygon(gd, v2, tile.color);
+                Vector2 c0 = tile.position - minV;
+                Vector2 c1 = c0 * (100 / width);
+                Vector2 c2 = c1 + padding;
+                Tile.DrawPolygon(gd, v2, tile.color, c2);
             }
 
         }

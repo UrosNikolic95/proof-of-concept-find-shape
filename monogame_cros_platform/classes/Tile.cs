@@ -15,8 +15,8 @@ namespace monogame_cros_platform.classes
 {
     public class Tile
     {
-        public Vector2[] previousPoints = new Vector2[7];
-        public Vector2[] _currentPoints = new Vector2[7];
+        public Vector2[] previousPoints = new Vector2[6];
+        public Vector2[] _currentPoints = new Vector2[6];
         public Vector2[] currentPoints
         {
             get
@@ -95,14 +95,19 @@ namespace monogame_cros_platform.classes
             calculateMinAndMax();
         }
 
+        private static VertexPositionColor transformVectorsToVertexPositionColor(Vector2 v3, Color color)
+        {
+                VertexPositionColor vertex = new VertexPositionColor();
+                vertex.Position = new Vector3(v3.X, v3.Y, 0);
+                vertex.Color = color;
+            return vertex;
+        }
+
         private static VertexPositionColor[] transformVectorsToVertexPositionColor(Vector2[] v3, Color color)
         {
             VertexPositionColor[] vertexPositionColors = new VertexPositionColor[v3.Length];
             for (int i = 0; i < v3.Length; i++) {
-                VertexPositionColor vertices = new VertexPositionColor();
-                vertices.Position =  new Vector3(v3[i].X, v3[i].Y,0);
-                vertices.Color = color;
-                vertexPositionColors[i] = vertices;
+                vertexPositionColors[i] = transformVectorsToVertexPositionColor(v3[i], color);
             }
             return vertexPositionColors;
         }
@@ -127,22 +132,22 @@ namespace monogame_cros_platform.classes
             return null;
         }
 
-        public static void DrawPolygon(GraphicsDevice gd, Vector2[] points, Color color)
+        public static void DrawPolygon(GraphicsDevice gd, Vector2[] points, Color color, Vector2 position)
         {
             VertexPositionColor[] vertices = transformVectorsToVertexPositionColor(points, color);
-            int triangles = vertices.Length - 1;
+            int triangles = vertices.Length;
             VertexPositionColor[] indices = new VertexPositionColor[triangles * 3];
-            VertexPositionColor center = vertices[0];
+            VertexPositionColor center = transformVectorsToVertexPositionColor(position,color);
             for (int i = 0; i < triangles - 1; i++)
             {
                 int i0 = i * 3;
                 indices[i0] = center;
-                indices[i0 + 1] = vertices[i + 1];
-                indices[i0 + 2] = vertices[i + 2];
+                indices[i0 + 1] = vertices[i];
+                indices[i0 + 2] = vertices[i + 1];
             }
             indices[indices.Length - 3] = center;
             indices[indices.Length - 2] = vertices[vertices.Length - 1];
-            indices[indices.Length - 1] = vertices[1];
+            indices[indices.Length - 1] = vertices[0];
             BasicEffect basicEffect = new BasicEffect(gd)
             {
                 VertexColorEnabled = true,
@@ -161,7 +166,7 @@ namespace monogame_cros_platform.classes
 
         public void Draw()
         {
-            DrawPolygon(map.gd, points(), displayColor());
+            DrawPolygon(map.gd, points(), displayColor(), position);
         }
     }
 }
