@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proof-of-concept-find-shape", "monogame_cros_platform\proof-of-concept-find-shape.csproj", "{3A1C05B8-A4C4-43C7-AEA5-84B724DC1EB3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proof-of-concept-find-shape", "proof-of-concept-find-shape\proof-of-concept-find-shape.csproj", "{5878E58D-16CB-4F68-9856-B9523A8775DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3A1C05B8-A4C4-43C7-AEA5-84B724DC1EB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A1C05B8-A4C4-43C7-AEA5-84B724DC1EB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A1C05B8-A4C4-43C7-AEA5-84B724DC1EB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A1C05B8-A4C4-43C7-AEA5-84B724DC1EB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5878E58D-16CB-4F68-9856-B9523A8775DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5878E58D-16CB-4F68-9856-B9523A8775DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5878E58D-16CB-4F68-9856-B9523A8775DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5878E58D-16CB-4F68-9856-B9523A8775DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
