@@ -380,18 +380,18 @@ namespace monogame_cros_platform.classes
             {
                 foreach (Tile tile in tiles)
                 {
-                    float rowIntensity = Helper.intensity(tile.position - startingPoint, rowDirection);
-                    float columnIntensity = Helper.intensity(tile.position - startingPoint, columnDirection);
-                    tile.position = (columnDirection * columnIntensity * (squareDistance / hexagonDistance)) + (rowDirection * rowIntensity * (squareDistance / hexagonHeghth));
+                    float rowIntensity = Helper.intensity(tile.position, rowDirection);
+                    float columnIntensity = Helper.intensity(tile.position, columnDirection);
+                    tile.position = ((columnDirection * columnIntensity * squareDistance) / hexagonDistance) + ((rowDirection * rowIntensity * squareDistance) / hexagonHeghth);
                 }
             }
             else
             {
                 foreach (Tile tile in tiles)
                 {
-                    float rowIntensity = Helper.intensity(tile.position - startingPoint, rowDirection);
-                    float columnIntensity = Helper.intensity(tile.position - startingPoint, columnDirection);
-                    tile.position = (columnDirection * columnIntensity * (hexagonDistance / squareDistance)) + (rowDirection * rowIntensity * (hexagonHeghth / squareDistance));
+                    float rowIntensity = Helper.intensity(tile.position, rowDirection);
+                    float columnIntensity = Helper.intensity(tile.position, columnDirection);
+                    tile.position = ((columnDirection * columnIntensity * hexagonDistance) / squareDistance) + ((rowDirection * rowIntensity * hexagonHeghth) / squareDistance);
                 }
             }
         }
@@ -477,13 +477,14 @@ namespace monogame_cros_platform.classes
             float height = yMax - yMin;
             Vector2 minV = new Vector2(xMin, yMin);
             Vector2 padding = new Vector2(10,10);
+            float scale = 100 / width;
             foreach (Tile tile in chosenHexes)
             {
                 Vector2[] v0 = Helper.addAll(tile.currentPoints, -minV);
-                Vector2[] v1 = Helper.multiplyAll(v0, 100 / width);
+                Vector2[] v1 = Helper.multiplyAll(v0, scale);
                 Vector2[] v2 = Helper.addAll(v1, padding);
                 Vector2 c0 = tile.position - minV;
-                Vector2 c1 = c0 * (100 / width);
+                Vector2 c1 = c0 * scale;
                 Vector2 c2 = c1 + padding;
                 Tile.DrawPolygon(gd, v2, tile.color, c2);
             }

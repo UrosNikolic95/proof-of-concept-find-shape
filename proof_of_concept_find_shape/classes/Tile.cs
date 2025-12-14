@@ -15,6 +15,7 @@ namespace monogame_cros_platform.classes
 {
     public class Tile
     {
+
         public Vector2[] previousPoints = new Vector2[6];
         public Vector2[] _currentPoints = new Vector2[6];
         public Vector2[] currentPoints
@@ -163,7 +164,7 @@ namespace monogame_cros_platform.classes
                 gd.DrawUserPrimitives(PrimitiveType.TriangleList, indices, 0, indices.Length / 3);
             }
         }
-
+             
         public void Draw()
         {
             DrawPolygon(map.gd, points(), displayColor(), position);
