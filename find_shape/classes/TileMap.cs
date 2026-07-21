@@ -284,7 +284,7 @@ namespace monogame_cros_platform.classes
                 {
                     Tile t = new Tile()
                     {
-                        color = colorOptions[Random.Shared.Next() % colorOptions.Length],
+                        color = pickRandom(colorOptions),
                         position = new Vector2(column * squareDistance, row * squareDistance),
                         map = this
                     };
@@ -302,8 +302,10 @@ namespace monogame_cros_platform.classes
         {
             Queue<Tile> toProcess = new Queue<Tile>();
             toProcess.Enqueue(start);
-            HashSet<Tile> visited = new HashSet<Tile>();
-            visited.Add(start);
+            HashSet<Tile> visited = new HashSet<Tile>
+            {
+                start
+            };
             while (toProcess.Count > 0)
             {
                 Tile tile = toProcess.Dequeue();
@@ -334,15 +336,23 @@ namespace monogame_cros_platform.classes
             return groups.ToArray();
         }
 
+        public T pickRandom<T>(IEnumerable<T> en)
+        {
+            return en.ElementAt(Random.Shared.Next() % en.Count());
+        }
+
         public Tile[] pickUniq()
         {
             Tile[][] groups = groupTiles();
             Dictionary<int, int> counted = new Dictionary<int, int>();
+            // count how many in each group of tiles with same number of tiles
             foreach (Tile[] group in groups)
             {
                 if (!counted.ContainsKey(group.Length)) counted[group.Length] = 0;
                 counted[group.Length]++;
             }
+            // remove groups with more than 1 tile;
+            // remaining is groups with unique number tiles;
             foreach (KeyValuePair<int, int> c in counted)
             {
                 if (c.Value != 1)
@@ -350,20 +360,15 @@ namespace monogame_cros_platform.classes
                     counted.Remove(c.Key);
                 }
             }
-            Tile[][] remainingGroups = groups.Where(el => counted.ContainsKey(el.Length)).ToArray();
-            return remainingGroups.Length != 0 ? remainingGroups[Random.Shared.Next() % remainingGroups.Length] : groups[Random.Shared.Next() % groups.Length];
+            // take groups;
+            Tile[][] g1 = groups.Where(el => counted.ContainsKey(el.Length)).ToArray();
+            if (g1.Length != 0) return pickRandom(g1);
+            // take groups with more than one tile;
+            Tile[][] g2 = groups.Where(el => el.Length != 1).ToArray();
+            if (g2.Length != 0) return pickRandom(g2);
+            // take any group;
+            return pickRandom(groups);
         }
-
-        public Tile[] pickRandomGroup()
-        {
-            return takeWithSameColour(pickRandomTile());
-        }
-
-        public Tile pickRandomTile()
-        {
-            return tiles.ElementAt(Random.Shared.Next() % tiles.Count);
-        }
-
 
         public void evenRowShiftGeneralised(float columnDistance, float rowDistance, bool plus = true)
         {
@@ -517,7 +522,7 @@ namespace monogame_cros_platform.classes
             MinMax mm = new MinMax(tps);
             float width = mm.xMax - mm.xMin;
             float height = mm.yMax - mm.yMin;
-            float largerSide = width < height ? width : height;
+            float largerSide = width > height ? width : height;
             Vector2 minV = new Vector2(mm.xMin, mm.yMin);
             Vector2 padding = new Vector2(10, 10);
             float scale = 100 / largerSide;
