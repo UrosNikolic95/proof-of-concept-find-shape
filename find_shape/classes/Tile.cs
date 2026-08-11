@@ -118,6 +118,14 @@ namespace monogame_cros_platform.classes
         }
 
 
+        private static readonly RasterizerState rasterizerState = new RasterizerState
+        {
+            MultiSampleAntiAlias = true,
+            CullMode = CullMode.None
+        };
+
+        private static BasicEffect basicEffect;
+
         public static void DrawPolygon(GraphicsDevice gd, TilePoints points, Color color)
         {
             VertexPositionColor[] vertices = transformVectorsToVertexPositionColor(points.points, color);
@@ -134,18 +142,19 @@ namespace monogame_cros_platform.classes
             indices[indices.Length - 3] = center;
             indices[indices.Length - 2] = vertices[vertices.Length - 1];
             indices[indices.Length - 1] = vertices[0];
-            BasicEffect basicEffect = new BasicEffect(gd)
+            if (basicEffect == null || basicEffect.GraphicsDevice != gd)
             {
-                VertexColorEnabled = true,
-                Projection = Matrix.CreateOrthographicOffCenter(
+                basicEffect = new BasicEffect(gd) { VertexColorEnabled = true };
+            }
+            basicEffect.Projection = Matrix.CreateOrthographicOffCenter(
                 0,
                 gd.Viewport.Width,
                 gd.Viewport.Height,
                 0,
                 0,
                 1
-                )
-            };
+            );
+            gd.RasterizerState = rasterizerState;
             foreach (EffectPass effectPass in basicEffect.CurrentTechnique.Passes)
             {
                 effectPass.Apply();
