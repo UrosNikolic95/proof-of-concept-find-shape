@@ -20,9 +20,11 @@ namespace monogame_cros_platform
         public AppGame()
         {
             _graphics = new GraphicsDeviceManager(this);
+            // for smooth edges
             _graphics.PreferMultiSampling = true;
             _graphics.PreparingDeviceSettings += (s, e) =>
                 e.GraphicsDeviceInformation.PresentationParameters.MultiSampleCount = 8;
+            //-----------------
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }

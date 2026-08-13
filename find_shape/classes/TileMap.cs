@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using monogame_cros_platform.enums;
 using proof_of_concept_find_shape.classes;
-using static System.Net.WebRequestMethods;
 
 namespace monogame_cros_platform.classes
 {
@@ -47,6 +46,31 @@ namespace monogame_cros_platform.classes
 
         public Vector2 screenCenter;
         public Tile tileCenter;
+
+        private BasicEffect getBasicEfect(GraphicsDevice _gd)
+        {
+            BasicEffect be = new BasicEffect(_gd)
+            {
+                VertexColorEnabled = true,
+                Projection = Matrix.CreateOrthographicOffCenter(
+                0,
+                _gd.Viewport.Width,
+                _gd.Viewport.Height,
+                0,
+                0,
+                1
+                ),
+            };
+            // for smooth edges
+            _gd.RasterizerState = new RasterizerState
+            {
+                MultiSampleAntiAlias = true,
+                CullMode = CullMode.None
+            };
+            return be;
+        }
+
+        public BasicEffect basicEffect;
 
         public void moveAdditionalRotation()
         {
@@ -296,6 +320,7 @@ namespace monogame_cros_platform.classes
             centerTiles();
             setPoints();
             chosenHexes = pickUniq();
+            basicEffect = getBasicEfect(gd);
         }
 
         public Tile[] takeWithSameColour(Tile start)
@@ -532,7 +557,7 @@ namespace monogame_cros_platform.classes
                 TilePoints tp1 = tp + (-minV);
                 TilePoints tp2 = tp1 * scale;
                 TilePoints tp3 = tp2 + padding;
-                Tile.DrawPolygon(gd, tp3, tile.color);
+                Tile.DrawPolygon(basicEffect, tp3, tile.color);
             }
         }
     }

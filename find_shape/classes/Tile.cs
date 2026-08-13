@@ -117,16 +117,7 @@ namespace monogame_cros_platform.classes
             return null;
         }
 
-
-        private static readonly RasterizerState rasterizerState = new RasterizerState
-        {
-            MultiSampleAntiAlias = true,
-            CullMode = CullMode.None
-        };
-
-        private static BasicEffect basicEffect;
-
-        public static void DrawPolygon(GraphicsDevice gd, TilePoints points, Color color)
+        public static void DrawPolygon(BasicEffect be, TilePoints points, Color color)
         {
             VertexPositionColor[] vertices = transformVectorsToVertexPositionColor(points.points, color);
             int triangles = vertices.Length;
@@ -142,28 +133,15 @@ namespace monogame_cros_platform.classes
             indices[indices.Length - 3] = center;
             indices[indices.Length - 2] = vertices[vertices.Length - 1];
             indices[indices.Length - 1] = vertices[0];
-            if (basicEffect == null || basicEffect.GraphicsDevice != gd)
-            {
-                basicEffect = new BasicEffect(gd) { VertexColorEnabled = true };
-            }
-            basicEffect.Projection = Matrix.CreateOrthographicOffCenter(
-                0,
-                gd.Viewport.Width,
-                gd.Viewport.Height,
-                0,
-                0,
-                1
-            );
-            gd.RasterizerState = rasterizerState;
-            foreach (EffectPass effectPass in basicEffect.CurrentTechnique.Passes)
+            foreach (EffectPass effectPass in be.CurrentTechnique.Passes)
             {
                 effectPass.Apply();
-                gd.DrawUserPrimitives(PrimitiveType.TriangleList, indices, 0, indices.Length / 3);
+                be.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, indices, 0, indices.Length / 3);
             }
         }
         public void Draw()
         {
-            DrawPolygon(map.gd, points(), displayColor());
+            DrawPolygon(map.basicEffect, points(), displayColor());
         }
     }
 }
